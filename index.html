@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centenario Hidalgo 2026 - Confirmación</title>
+<style>
+  :root{
+    --bg:#f7f1e3; --card:#fff; --tx:#1b2b24; --mut:#6b7a70;
+    --line:#e7dcc2; --brand:#14523c; --gold:#a8823c; --crema:#e2ce9e;
+    --ok:#14523c; --no:#9aa79c;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--tx);
+       font:18px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+  header{text-align:center;padding:18px 0 14px}
+  header h1{margin:0;font-size:24px;letter-spacing:-.3px;color:var(--brand)}
+  header p{margin:6px 0 0;color:var(--mut);font-size:16px}
+  header:after{content:"";display:block;width:66px;height:3px;border-radius:2px;
+       background:var(--gold);margin:14px auto 0}
+  .logo{display:block;width:170px;max-width:60%;height:auto;margin:0 auto 4px;
+       mix-blend-mode:multiply}
+  .card{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--gold);
+       border-radius:16px;padding:18px;margin-bottom:14px}
+  label{display:block;font-weight:600;margin-bottom:8px;font-size:18px}
+  input[type=search],input[type=text],input[type=date]{
+       width:100%;padding:16px;font-size:20px;border:2px solid var(--line);
+       border-radius:12px;outline:none;background:#fff;color:var(--tx);
+       -webkit-appearance:none;appearance:none;font-family:inherit}
+  input:focus{border-color:var(--brand)}
+  .campo{margin-bottom:16px}
+  .hint{color:var(--mut);font-size:15px;margin-top:8px}
+  .lista{margin-top:14px;max-height:52vh;overflow:auto;-webkit-overflow-scrolling:touch}
+  .row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+       background:#fff;border:1px solid var(--line);border-radius:12px;
+       padding:14px;margin-bottom:8px;font-size:18px;color:var(--tx);cursor:pointer}
+  .row:active{background:#f7f1e3}
+  .row small{display:block;color:var(--mut);font-size:14px;margin-top:2px}
+  .row[disabled]{opacity:.55;cursor:default;background:#f7f9fb}
+  .tag{margin-left:auto;font-size:13px;font-weight:700;color:var(--ok);white-space:nowrap}
+  .tag.gris{color:var(--mut)}
+  .nombre-grande{font-size:24px;font-weight:700;line-height:1.25;margin:0 0 4px;color:var(--brand)}
+  .sub{color:var(--mut);font-size:15px;margin:0 0 18px}
+  .preg{font-size:20px;font-weight:600;margin:0 0 6px}
+  .preg + .hint{margin:0 0 14px}
+  .btns{display:flex;gap:12px}
+  button{font:inherit;border:0;border-radius:12px;cursor:pointer}
+  .big{flex:1;padding:20px 12px;font-size:20px;font-weight:700;color:#fff;background:var(--brand)}
+  .big.gris{background:var(--no)}
+  .big:active{filter:brightness(.92)}
+  .contador{display:flex;align-items:center;justify-content:center;gap:22px;margin:8px 0 22px}
+  .contador button{width:64px;height:64px;font-size:32px;font-weight:700;
+       background:var(--crema);color:var(--brand)}
+  .num{font-size:44px;font-weight:800;min-width:70px;text-align:center}
+  .link{display:block;width:100%;margin-top:14px;background:none;color:var(--mut);
+        font-size:16px;padding:12px;text-decoration:underline}
+  .secundario{width:100%;margin-top:12px;padding:16px;font-size:17px;font-weight:600;
+        background:var(--crema);color:var(--brand)}
+  .ok-box{text-align:center;padding:10px 0}
+  .ok-box .check{font-size:56px}
+  .resumen{background:#f7f1e3;border-radius:12px;padding:14px;margin:16px 0;text-align:left;font-size:17px}
+  .resumen b{display:inline-block;min-width:150px;color:var(--mut);font-weight:600}
+  .aviso{background:#fbf4e3;border:1px solid var(--crema);border-radius:12px;padding:14px;
+        font-size:16px;color:#6b5320}
+  .wa{display:inline-block;margin-top:10px;padding:12px 18px;border-radius:999px;
+       background:#25D366;color:#fff;font-weight:700;text-decoration:none;font-size:16px}
+  .error{background:#fdecec;border:1px solid #f3bcbc;border-radius:12px;padding:14px;
+         font-size:16px;color:#a12626;margin-bottom:14px}
+  .cargando{text-align:center;color:var(--mut);padding:30px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img class="logo" alt="100 años de esperanza y salvación" src="data:image/webp;base64,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">
+    <h1 id="tituloEvento">Centenario Hidalgo 2026</h1>
+    <p>Busca tu nombre y confirma. Es una sola vez.</p>
+  </header>
+
+  <div id="cargando" class="cargando">Cargando lista…</div>
+
+  <div id="paso1" class="card" hidden>
+    <label for="q">Escribe tu nombre o apellido</label>
+    <input id="q" type="search" autocomplete="off" placeholder="Ej. Eliezer Bautista">
+    <div class="hint">Puedes escribir solo una parte, por ejemplo: <b>bautista</b></div>
+    <div id="lista" class="lista"></div>
+    <button class="secundario" onclick="abrirNuevo()">No aparezco en la lista</button>
+  </div>
+
+  <div id="pasoNuevo" class="card" hidden>
+    <p class="nombre-grande">Registra tu nombre</p>
+    <p class="sub">Solo para hermanos que no aparecen en la lista.</p>
+    <div id="errNuevo" class="error" hidden></div>
+    <div class="campo">
+      <label for="nvNombre">Nombre completo</label>
+      <input id="nvNombre" type="text" autocomplete="name" placeholder="Nombre y apellidos">
+    </div>
+    <div class="campo">
+      <label for="nvFecha">Fecha de nacimiento</label>
+      <input id="nvFecha" type="date">
+      <div class="hint">Se usa para verificar la edad. El registro es solo para mayores de <b id="edadMin">14</b> años.</div>
+    </div>
+    <div class="campo">
+      <label for="nvIglesia">Iglesia (opcional)</label>
+      <input id="nvIglesia" type="text" placeholder="Ej. Tulancingo - Guadalupe">
+    </div>
+    <div class="btns"><button class="big" onclick="validarNuevo()">Continuar</button></div>
+    <button class="link" onclick="volver()">Regresar a la búsqueda</button>
+  </div>
+
+  <div id="paso2" class="card" hidden>
+    <p class="nombre-grande" id="n2"></p>
+    <p class="sub" id="s2"></p>
+    <p class="preg">¿Vas a asistir al evento?</p>
+    <div class="btns">
+      <button class="big" onclick="setAsiste(true)">SÍ voy</button>
+      <button class="big gris" onclick="setAsiste(false)">No voy</button>
+    </div>
+    <button class="link" onclick="volver()">No soy yo, empezar de nuevo</button>
+  </div>
+
+  <div id="paso3" class="card" hidden>
+    <p class="nombre-grande" id="n3"></p>
+    <p class="preg">¿Necesitas hospedaje?</p>
+    <div class="btns">
+      <button class="big" onclick="setHosp(true)">SÍ necesito</button>
+      <button class="big gris" onclick="setHosp(false)">No necesito</button>
+    </div>
+    <button class="link" onclick="ir(2)">Regresar</button>
+  </div>
+
+  <div id="paso4" class="card" hidden>
+    <p class="nombre-grande" id="n4"></p>
+    <p class="preg">¿Cuántos brazaletes necesitas?</p>
+    <div class="hint">Los brazaletes son para los <b>menores de 13 años</b> que te
+      acompañan. Si no llevas niños, deja el <b>0</b>.</div>
+    <div class="contador">
+      <button onclick="braz(-1)">−</button>
+      <div class="num" id="numBraz">0</div>
+      <button onclick="braz(1)">+</button>
+    </div>
+    <div class="btns"><button class="big" onclick="enviar()">Enviar confirmación</button></div>
+    <button class="link" onclick="ir(3)">Regresar</button>
+  </div>
+
+  <div id="pasoEnv" class="card" hidden>
+    <div class="cargando">Enviando…</div>
+  </div>
+
+  <div id="paso5" class="card" hidden>
+    <div class="ok-box">
+      <div class="check">✅</div>
+      <p class="nombre-grande" id="n5"></p>
+      <p class="sub">Tu confirmación quedó registrada.</p>
+      <div class="resumen" id="resumen"></div>
+      <div class="aviso">¿Necesitas corregir algo?<br>
+        <a class="wa" target="_blank" rel="noopener"
+           href="https://wa.me/525523134562?text=Hola%20Hno.%20Eliezer%2C%20necesito%20corregir%20mi%20confirmaci%C3%B3n%20del%20evento.">
+          Escribir al Hno. Eliezer por WhatsApp</a>
+      </div>
+    </div>
+    <button class="secundario" onclick="volver()">Registrar otra confirmación</button>
+  </div>
+
+  <div id="pasoDup" class="card" hidden>
+    <div class="ok-box">
+      <div class="check">☑️</div>
+      <p class="nombre-grande" id="nDup"></p>
+      <p class="sub">Este nombre ya había confirmado. No se puede registrar dos veces.</p>
+    </div>
+    <button class="link" onclick="volver()">Buscar otro nombre</button>
+  </div>
+
+  <div id="pasoMenor" class="card" hidden>
+    <div class="ok-box">
+      <div class="check">🚫</div>
+      <p class="nombre-grande">Registro no disponible</p>
+      <p class="sub">Este registro es solo para mayores de <span class="edadMin">14</span> años.
+        Los menores se registran con sus papás o con el encargado.</p>
+    </div>
+    <button class="link" onclick="volver()">Regresar</button>
+  </div>
+</div>
+
+<script>
+var API = "https://script.google.com/macros/s/AKfycbzFAm9AMx-JK2klKgJ3rpOjgIWFkRrzQSSx-nJLdOQAlS6xYHYbGAeTkX0v4Ken5H0B/exec";
+var DATOS = null, sel = null, modo = 'base', nJsonp = 0;
+var resp = { asiste:false, hospedaje:false, brazaletes:0 };
+var nuevo = { nombre:'', nacimiento:'', iglesia:'' };
+
+function jsonp(params){
+  return new Promise(function(resolver, rechazar){
+    var cb = 'cb_' + (++nJsonp) + '_' + Date.now();
+    var s = document.createElement('script');
+    var t = setTimeout(function(){ limpiar(); rechazar(new Error('timeout')); }, 40000);
+    function limpiar(){
+      clearTimeout(t);
+      try { delete window[cb]; } catch(e) { window[cb] = undefined; }
+      if (s.parentNode) s.parentNode.removeChild(s);
+    }
+    window[cb] = function(d){ limpiar(); resolver(d); };
+    var q = [];
+    for (var k in params){ q.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k])); }
+    q.push('callback=' + cb);
+    s.src = API + '?' + q.join('&');
+    s.onerror = function(){ limpiar(); rechazar(new Error('red')); };
+    document.head.appendChild(s);
+  });
+}
+
+function norm(s){
+  return (s||'').toString().toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+}
+function $(id){ return document.getElementById(id); }
+
+function ir(n){
+  ['paso1','paso2','paso3','paso4','paso5','pasoDup','pasoEnv','pasoNuevo','pasoMenor']
+    .forEach(function(p){ $(p).hidden = true; });
+  var map = { env:'pasoEnv', dup:'pasoDup', nuevo:'pasoNuevo', menor:'pasoMenor' };
+  $(map[n] || ('paso' + n)).hidden = false;
+  window.scrollTo(0,0);
+}
+
+function volver(){
+  sel = null; modo = 'base';
+  resp = { asiste:false, hospedaje:false, brazaletes:0 };
+  $('q').value = ''; pintar(''); ir(1);
+}
+
+jsonp({ accion: 'datos' }).then(function(d){
+  DATOS = d;
+  if (d.evento) $('tituloEvento').textContent = d.evento;
+  $('edadMin').textContent = d.edadMinima;
+  Array.prototype.forEach.call(document.querySelectorAll('.edadMin'), function(e){
+    e.textContent = d.edadMinima;
+  });
+  $('cargando').hidden = true;
+  ir(1);
+  pintar('');
+  $('q').addEventListener('input', function(){ pintar(this.value); });
+}).catch(function(){
+  $('cargando').textContent = 'No se pudo cargar la lista. Revisa tu internet y recarga la página.';
+});
+
+function pintar(q){
+  var t = norm(q), cont = $('lista'), out = '';
+  if (t.length < 2){
+    cont.innerHTML = '<div class="hint" style="padding:14px 2px">Escribe al menos 2 letras…</div>';
+    return;
+  }
+  var res = DATOS.miembros.filter(function(m){ return norm(m.nombre).indexOf(t) !== -1; }).slice(0, 40);
+  if (!res.length){
+    cont.innerHTML = '<div class="hint" style="padding:14px 2px">No encontramos ese nombre. '
+                   + 'Revisa cómo lo escribiste o usa el botón de abajo.</div>';
+    return;
+  }
+  res.forEach(function(m){
+    var ya = DATOS.tomados.hasOwnProperty(m.id);
+    var bloqueado = ya || m.menor;
+    var etiqueta = ya ? '<span class="tag">✓ Ya confirmó</span>'
+                 : m.menor ? '<span class="tag gris">Menor de ' + DATOS.edadMinima + '</span>' : '';
+    out += '<button class="row" data-id="'+m.id+'"'+(bloqueado?' disabled':'')+'>'
+         + '<span><b>'+m.nombre+'</b><small>'+(m.iglesia||'')+'</small></span>'
+         + etiqueta + '</button>';
+  });
+  cont.innerHTML = out;
+  Array.prototype.forEach.call(cont.querySelectorAll('.row:not([disabled])'), function(b){
+    b.addEventListener('click', function(){ elegir(b.getAttribute('data-id')); });
+  });
+}
+
+function elegir(id){
+  sel = null;
+  for (var i=0;i<DATOS.miembros.length;i++){ if (DATOS.miembros[i].id === id) sel = DATOS.miembros[i]; }
+  if (!sel) return;
+  if (sel.menor) { ir('menor'); return; }
+  modo = 'base';
+  resp = { asiste:false, hospedaje:false, brazaletes:0 };
+  prepararPantallas(sel.nombre, sel.iglesia + (sel.grado ? ' · ' + sel.grado : ''));
+  ir(2);
+}
+
+function prepararPantallas(nombre, sub){
+  $('n2').textContent = nombre;
+  $('s2').textContent = sub || '';
+  $('n3').textContent = nombre;
+  $('n4').textContent = nombre;
+  $('numBraz').textContent = '0';
+}
+
+function abrirNuevo(){
+  sel = null;
+  $('errNuevo').hidden = true;
+  $('nvNombre').value = $('q').value.trim();
+  ir('nuevo');
+}
+
+function errN(msg){ var e = $('errNuevo'); e.textContent = msg; e.hidden = false; window.scrollTo(0,0); }
+
+function edadDesde(iso){
+  var p = (iso || '').split('-');
+  if (p.length !== 3) return null;
+  var f = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  if (isNaN(f.getTime())) return null;
+  var h = new Date(), e = h.getFullYear() - f.getFullYear(), m = h.getMonth() - f.getMonth();
+  if (m < 0 || (m === 0 && h.getDate() < f.getDate())) e--;
+  return e;
+}
+
+function validarNuevo(){
+  var nombre = $('nvNombre').value.replace(/\s+/g,' ').trim();
+  var iso = $('nvFecha').value;
+
+  if (nombre.split(' ').length < 2 || nombre.length < 6){
+    return errN('Escribe tu nombre completo, con apellidos.');
+  }
+  if (DATOS.nombresTomados[norm(nombre)]){
+    $('nDup').textContent = nombre; return ir('dup');
+  }
+  var yaEnBase = DATOS.miembros.filter(function(m){ return norm(m.nombre) === norm(nombre); });
+  if (yaEnBase.length){ return elegir(yaEnBase[0].id); }
+
+  var edad = edadDesde(iso);
+  if (edad === null || edad < 0 || edad > 110){
+    return errN('Escribe una fecha de nacimiento válida.');
+  }
+  if (edad < DATOS.edadMinima){ return ir('menor'); }
+
+  modo = 'nuevo';
+  nuevo = { nombre: nombre, nacimiento: isoADmy(iso), iglesia: $('nvIglesia').value.trim() };
+  resp = { asiste:false, hospedaje:false, brazaletes:0 };
+  prepararPantallas(nombre, nuevo.iglesia);
+  ir(2);
+}
+
+function isoADmy(iso){
+  var p = iso.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function setAsiste(v){ resp.asiste = v; if (v) ir(3); else enviar(); }
+function setHosp(v){ resp.hospedaje = v; ir(4); }
+function braz(d){
+  var max = DATOS.maxBraz || 10;
+  resp.brazaletes = Math.max(0, Math.min(max, resp.brazaletes + d));
+  $('numBraz').textContent = resp.brazaletes;
+}
+
+function enviar(){
+  ir('env');
+  var payload = { asiste: resp.asiste, hospedaje: resp.hospedaje, brazaletes: resp.brazaletes };
+  var accion;
+  if (modo === 'nuevo'){
+    payload.nombre = nuevo.nombre;
+    payload.nacimiento = nuevo.nacimiento;
+    payload.iglesia = nuevo.iglesia;
+    accion = 'nuevo';
+  } else {
+    payload.id = sel.id;
+    accion = 'confirmar';
+  }
+  jsonp({ accion: accion, datos: JSON.stringify(payload) })
+    .then(alTerminar)
+    .catch(function(){
+      alert('No se pudo enviar. Revisa tu internet e intenta de nuevo.');
+      ir(2);
+    });
+}
+
+function alTerminar(r){
+  if (!r || !r.ok){
+    var motivo = r ? r.motivo : '';
+    if (motivo === 'duplicado'){
+      var nom = modo === 'nuevo' ? nuevo.nombre : sel.nombre;
+      $('nDup').textContent = nom;
+      DATOS.nombresTomados[norm(nom)] = true;
+      if (sel) DATOS.tomados[sel.id] = 'SI';
+      return ir('dup');
+    }
+    if (motivo === 'menor') return ir('menor');
+    if (motivo === 'nombre_incompleto'){ ir('nuevo'); return errN('Escribe tu nombre completo, con apellidos.'); }
+    if (motivo === 'fecha_invalida'){ ir('nuevo'); return errN('Escribe una fecha de nacimiento válida.'); }
+    alert('Ocurrió un error. Intenta de nuevo.');
+    return ir(2);
+  }
+
+  if (sel) DATOS.tomados[sel.id] = r.asiste;
+  DATOS.nombresTomados[norm(r.nombre)] = true;
+
+  $('n5').textContent = r.nombre;
+  $('resumen').innerHTML =
+      '<div><b>Asiste:</b> ' + (r.asiste === 'SI' ? 'Sí' : 'No') + '</div>'
+    + (r.asiste === 'SI'
+        ? '<div><b>Hospedaje:</b> ' + (r.hospedaje === 'SI' ? 'Sí' : 'No') + '</div>'
+        + '<div><b>Brazaletes (menores de 13):</b> ' + r.brazaletes + '</div>'
+        : '');
+  ir(5);
+}
+</script>
+</body>
+</html>
