@@ -68,6 +68,9 @@
   .error{background:#fdecec;border:1px solid #f3bcbc;border-radius:12px;padding:14px;
          font-size:16px;color:#a12626;margin-bottom:14px}
   .cargando{text-align:center;color:var(--mut);padding:30px}
+  .opcion{flex:1;padding:16px 10px;font-size:18px;font-weight:600;background:#fff;
+       border:2px solid var(--line);color:var(--tx)}
+  .opcion.sel{background:var(--brand);border-color:var(--brand);color:#fff}
   .creditos{text-align:center;color:var(--mut);font-size:13px;margin:26px 0 0;
        letter-spacing:.2px;opacity:.85}
   .creditos span{color:var(--gold);font-weight:600}
@@ -99,6 +102,13 @@
     <div class="campo">
       <label for="nvNombre">Nombre completo</label>
       <input id="nvNombre" type="text" autocomplete="name" placeholder="Nombre y apellidos">
+    </div>
+    <div class="campo">
+      <label>¿Eres miembro o visita?</label>
+      <div class="btns">
+        <button type="button" class="opcion" id="optMiembro" onclick="setTipo('Miembro')">Miembro</button>
+        <button type="button" class="opcion" id="optVisita" onclick="setTipo('Visita')">Visita</button>
+      </div>
     </div>
     <div class="campo">
       <label for="nvFecha">Fecha de nacimiento</label>
@@ -194,7 +204,14 @@
 var API = "https://script.google.com/macros/s/AKfycbzFAm9AMx-JK2klKgJ3rpOjgIWFkRrzQSSx-nJLdOQAlS6xYHYbGAeTkX0v4Ken5H0B/exec";
 var DATOS = null, sel = null, modo = 'base', nJsonp = 0;
 var resp = { asiste:false, hospedaje:false, brazaletes:0 };
-var nuevo = { nombre:'', nacimiento:'', iglesia:'' };
+var nuevo = { nombre:'', nacimiento:'', iglesia:'', tipo:'' };
+var tipoSel = '';
+
+function setTipo(t){
+  tipoSel = t;
+  document.getElementById('optMiembro').classList.toggle('sel', t === 'Miembro');
+  document.getElementById('optVisita').classList.toggle('sel', t === 'Visita');
+}
 
 function jsonp(params){
   return new Promise(function(resolver, rechazar){
@@ -300,6 +317,9 @@ function prepararPantallas(nombre, sub){
 
 function abrirNuevo(){
   sel = null;
+  tipoSel = '';
+  $('optMiembro').classList.remove('sel');
+  $('optVisita').classList.remove('sel');
   $('errNuevo').hidden = true;
   $('nvNombre').value = $('q').value.trim();
   ir('nuevo');
@@ -324,6 +344,9 @@ function validarNuevo(){
   if (nombre.split(' ').length < 2 || nombre.length < 6){
     return errN('Escribe tu nombre completo, con apellidos.');
   }
+  if (!tipoSel){
+    return errN('Indica si eres miembro o visita.');
+  }
   if (DATOS.nombresTomados[norm(nombre)]){
     $('nDup').textContent = nombre; return ir('dup');
   }
@@ -337,7 +360,7 @@ function validarNuevo(){
   if (edad < DATOS.edadMinima){ return ir('menor'); }
 
   modo = 'nuevo';
-  nuevo = { nombre: nombre, nacimiento: isoADmy(iso), iglesia: $('nvIglesia').value.trim() };
+  nuevo = { nombre: nombre, nacimiento: isoADmy(iso), iglesia: $('nvIglesia').value.trim(), tipo: tipoSel };
   resp = { asiste:false, hospedaje:false, brazaletes:0 };
   prepararPantallas(nombre, nuevo.iglesia);
   ir(2);
@@ -364,6 +387,7 @@ function enviar(){
     payload.nombre = nuevo.nombre;
     payload.nacimiento = nuevo.nacimiento;
     payload.iglesia = nuevo.iglesia;
+    payload.tipo = nuevo.tipo;
     accion = 'nuevo';
   } else {
     payload.id = sel.id;
